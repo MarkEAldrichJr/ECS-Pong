@@ -1,16 +1,19 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class WallAuthoring : MonoBehaviour
+namespace Authoring
 {
-    public class WallAuthoringBaker : Baker<WallAuthoring>
+    public class WallAuthoring : MonoBehaviour
     {
-        public override void Bake(WallAuthoring authoring)
+        public class WallAuthoringBaker : Baker<WallAuthoring>
         {
-            var e =  GetEntity(authoring, TransformUsageFlags.WorldSpace);
-            AddComponent<WallTag>(e);
+            public override void Bake(WallAuthoring authoring)
+            {
+                var e =  GetEntity(authoring, TransformUsageFlags.WorldSpace);
+                AddComponent<WallTag>(e);
+            }
         }
     }
-}
 
-public struct WallTag :  IComponentData { }
+    public struct WallTag :  IComponentData { }
+}

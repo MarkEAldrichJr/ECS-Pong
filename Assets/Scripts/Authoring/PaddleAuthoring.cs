@@ -2,27 +2,30 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class PaddleAuthoring : MonoBehaviour
+namespace Authoring
 {
-    public float moveSpeed = 5f;
-    
-    public class PaddleAuthoringBaker : Baker<PaddleAuthoring>
+    public class PaddleAuthoring : MonoBehaviour
     {
-        public override void Bake(PaddleAuthoring authoring)
+        public float moveSpeed = 5f;
+    
+        public class PaddleAuthoringBaker : Baker<PaddleAuthoring>
         {
-            var e = GetEntity(authoring, TransformUsageFlags.Dynamic);
-            
-            AddComponent<PaddleTag>(e);
-            AddComponent(e, new Move
+            public override void Bake(PaddleAuthoring authoring)
             {
-                MoveDirection = float2.zero,
-                MoveSpeed = authoring.moveSpeed,
-                SpeedDelta = 0f
-            });
+                var e = GetEntity(authoring, TransformUsageFlags.Dynamic);
+            
+                AddComponent<PaddleTag>(e);
+                AddComponent(e, new Move
+                {
+                    MoveDirection = float2.zero,
+                    MoveSpeed = authoring.moveSpeed,
+                    SpeedDelta = 0f
+                });
+            }
         }
     }
+
+
+
+    public struct PaddleTag : IComponentData { }
 }
-
-
-
-public struct PaddleTag : IComponentData { }

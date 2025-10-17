@@ -1,16 +1,19 @@
 ﻿using Unity.Entities;
 using UnityEngine;
 
-public class GoalAuthoring : MonoBehaviour
+namespace Authoring
 {
-    private class GoalAuthoringBaker : Baker<GoalAuthoring>
+    public class GoalAuthoring : MonoBehaviour
     {
-        public override void Bake(GoalAuthoring authoring)
+        private class GoalAuthoringBaker : Baker<GoalAuthoring>
         {
-            var e = GetEntity(authoring, TransformUsageFlags.Dynamic);
-            AddComponent<GoalTag>(e);
+            public override void Bake(GoalAuthoring authoring)
+            {
+                var e = GetEntity(authoring, TransformUsageFlags.Dynamic);
+                AddComponent<GoalTag>(e);
+            }
         }
     }
-}
 
-public struct GoalTag : IComponentData {}
+    public struct GoalTag : IComponentData {}
+}

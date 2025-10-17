@@ -2,35 +2,38 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class BulletMoveAuthoring : MonoBehaviour
+namespace Authoring
 {
-    public float initialSpeed;
-    public float speedDelta;
-
-    public class BulletMoveBaker : Baker<BulletMoveAuthoring>
+    public class BulletMoveAuthoring : MonoBehaviour
     {
-        public override void Bake(BulletMoveAuthoring authoring)
+        public float initialSpeed;
+        public float speedDelta;
+
+        public class BulletMoveBaker : Baker<BulletMoveAuthoring>
         {
-            var entity = GetEntity(authoring, TransformUsageFlags.Dynamic);
-            
-            AddComponent<InitializeFlag>(entity);
-            AddComponent<BounceFlag>(entity);
-            AddComponent(entity, new Move
+            public override void Bake(BulletMoveAuthoring authoring)
             {
-                MoveSpeed = authoring.initialSpeed,
-                MoveDirection = float2.zero,
-                SpeedDelta = authoring.speedDelta
-            });
+                var entity = GetEntity(authoring, TransformUsageFlags.Dynamic);
+            
+                AddComponent<InitializeFlag>(entity);
+                AddComponent<BounceFlag>(entity);
+                AddComponent(entity, new Move
+                {
+                    MoveSpeed = authoring.initialSpeed,
+                    MoveDirection = float2.zero,
+                    SpeedDelta = authoring.speedDelta
+                });
+            }
         }
     }
-}
 
-public struct Move : IComponentData
-{
-    public float MoveSpeed;
-    public float SpeedDelta;
-    public float2 MoveDirection;
-}
+    public struct Move : IComponentData
+    {
+        public float MoveSpeed;
+        public float SpeedDelta;
+        public float2 MoveDirection;
+    }
 
-public struct BounceFlag : IComponentData {}
-public struct InitializeFlag : IComponentData {}
+    public struct BounceFlag : IComponentData {}
+    public struct InitializeFlag : IComponentData {}
+}
