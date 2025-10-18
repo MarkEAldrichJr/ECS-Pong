@@ -6,6 +6,7 @@ using Unity.Mathematics;
 
 namespace Systems
 {
+    [UpdateInGroup(typeof(InitializationSystemGroup))]
     public partial struct InitializeBulletSystem : ISystem
     {
         private Random _rng;

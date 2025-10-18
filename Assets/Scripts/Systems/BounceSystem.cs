@@ -7,6 +7,7 @@ using Unity.Transforms;
 
 namespace Systems
 {
+    [UpdateInGroup(typeof(SimulationSystemGroup))]
     public partial struct BounceSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
@@ -17,7 +18,7 @@ namespace Systems
             state.RequireForUpdate(state.GetEntityQuery(builder));
             state.RequireForUpdate<PhysicsWorldSingleton>();
         }
-
+        
         public void OnUpdate(ref SystemState state)
         {
             var collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>()
