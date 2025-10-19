@@ -367,7 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b93786f16b86084f86cf2668a0d9701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PaddleAuthoring
-  moveSpeed: 5
+  moveSpeed: 10
 --- !u!1 &1450508858
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,7 +740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b93786f16b86084f86cf2668a0d9701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PaddleAuthoring
-  moveSpeed: 5
+  moveSpeed: 10
 --- !u!1 &1756072872
 GameObject:
   m_ObjectHideFlags: 0

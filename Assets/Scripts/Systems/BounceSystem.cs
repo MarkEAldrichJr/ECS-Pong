@@ -70,7 +70,12 @@ namespace Systems
                         var hitHeight = trans.ValueRO.Position.y;
                         var hitCenter = state.EntityManager.GetComponentData<LocalTransform>(distanceHit.Entity).Position.y;
                         var hitDistance = hitHeight - hitCenter;
-                        move.ValueRW.MoveDirection.y = math.remap(-2.5f, 2.5f, -4f, 4f, hitDistance);
+                        move.ValueRW.MoveDirection.y = math.clamp(
+                            math.remap(
+                                -2.5f, 2.5f, -4f, 4f, hitDistance),
+                            -5f,
+                            5f);
+
                         
                         //normalize
                         move.ValueRW.MoveDirection = math.normalize(move.ValueRO.MoveDirection);
