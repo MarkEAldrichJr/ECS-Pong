@@ -60,8 +60,15 @@ namespace Systems
                             move.ValueRW.MoveDirection.x = -math.abs(move.ValueRO.MoveDirection.x);
                         else
                             move.ValueRW.MoveDirection.x = math.abs(move.ValueRO.MoveDirection.x);
+
+                        var hitHeight = trans.ValueRO.Position.y;
+                        var hitCenter = state.EntityManager.GetComponentData<LocalTransform>(distanceHit.Entity).Position.y;
+                        var hitDistance = hitHeight - hitCenter;
+                        move.ValueRW.MoveDirection.y = math.remap(-2.5f, 2.5f, -4f, 4f, hitDistance);
                         
-                        //TODO: set move angle based on height compared to the paddle
+                        
+                        move.ValueRW.MoveDirection = math.normalize(move.ValueRO.MoveDirection);
+                        
                         //TODO: add paddle bonk noise
                     }
                     else if (state.EntityManager.HasComponent<GoalTag>(distanceHit.Entity))
