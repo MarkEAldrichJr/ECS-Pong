@@ -38,7 +38,7 @@ namespace Systems
                 if (sideDist is > 17 or < -17)
                 {
                     trans.ValueRW.Position = float3.zero;
-                    move.ValueRW.MoveSpeed = 1f;
+                    move.ValueRW.MoveSpeed = 5f; //Magic number.  Speed is set on Move IComponentData
                 }
             }
         }
