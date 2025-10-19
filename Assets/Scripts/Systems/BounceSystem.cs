@@ -56,7 +56,11 @@ namespace Systems
                     } 
                     else if (state.EntityManager.HasComponent<PaddleTag>(distanceHit.Entity))
                     {
-                        move.ValueRW.MoveDirection.x = -move.ValueRO.MoveDirection.x;
+                        if (trans.ValueRO.Position.x > 0)
+                            move.ValueRW.MoveDirection.x = -math.abs(move.ValueRO.MoveDirection.x);
+                        else
+                            move.ValueRW.MoveDirection.x = math.abs(move.ValueRO.MoveDirection.x);
+                        
                         //TODO: set move angle based on height compared to the paddle
                         //TODO: add paddle bonk noise
                     }
