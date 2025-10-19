@@ -51,35 +51,31 @@ namespace Systems
                 {
                     if (state.EntityManager.HasComponent<WallTag>(distanceHit.Entity))
                     {
-                        move.ValueRW.MoveDirection.y = -move.ValueRO.MoveDirection.y;
+                        if (trans.ValueRO.Position.y > 0)
+                            move.ValueRW.MoveDirection.y = -math.abs(move.ValueRO.MoveDirection.y);
+                        else
+                            move.ValueRW.MoveDirection.y = math.abs(move.ValueRO.MoveDirection.y);
+                        
                         //TODO: Add wall bonk noise
                     } 
                     else if (state.EntityManager.HasComponent<PaddleTag>(distanceHit.Entity))
                     {
+                        //change ball direction left or right based on height.
                         if (trans.ValueRO.Position.x > 0)
                             move.ValueRW.MoveDirection.x = -math.abs(move.ValueRO.MoveDirection.x);
                         else
                             move.ValueRW.MoveDirection.x = math.abs(move.ValueRO.MoveDirection.x);
 
+                        //change ball direction up or down based on distance to the center of the paddle
                         var hitHeight = trans.ValueRO.Position.y;
                         var hitCenter = state.EntityManager.GetComponentData<LocalTransform>(distanceHit.Entity).Position.y;
                         var hitDistance = hitHeight - hitCenter;
                         move.ValueRW.MoveDirection.y = math.remap(-2.5f, 2.5f, -4f, 4f, hitDistance);
                         
-                        
+                        //normalize
                         move.ValueRW.MoveDirection = math.normalize(move.ValueRO.MoveDirection);
                         
                         //TODO: add paddle bonk noise
-                    }
-                    else if (state.EntityManager.HasComponent<GoalTag>(distanceHit.Entity))
-                    {
-                        //destroy the entity
-                        //tick the player's side by one
-                        //play goal noise
-                    }
-                    else
-                    {
-                        //error
                     }
                 }
             }
