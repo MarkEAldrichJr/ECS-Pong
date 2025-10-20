@@ -29,14 +29,12 @@ namespace Systems
                          .Query<RefRW<Move>, RefRO<LocalTransform>>()
                          .WithAll<PaddleTag>())
             {
-                if (trans.ValueRO.Position.x < 0f)
-                {
-                    move.ValueRW.MoveDirection.y = leftPaddleInput.Value;
-                }
-                else
-                {
-                    move.ValueRW.MoveDirection.y = rightPaddleInput.Value;
-                }
+                move.ValueRW.MoveDirection.y = trans.ValueRO.Position.x < 0f ? 
+                    leftPaddleInput.Value : rightPaddleInput.Value;
+
+                if (trans.ValueRO.Position.y > 7 && move.ValueRO.MoveDirection.y > 0f ||
+                    trans.ValueRO.Position.y < -7f && move.ValueRO.MoveDirection.y < 0f)
+                    move.ValueRW.MoveDirection.y = 0;
             }
         }
     }
