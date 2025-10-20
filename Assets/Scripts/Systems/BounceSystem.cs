@@ -10,13 +10,11 @@ using Unity.Transforms;
 namespace Systems
 {
     [UpdateInGroup(typeof(SimulationSystemGroup))]
-    [BurstCompile]
     public partial struct BounceSystem : ISystem
     {
         private EntityQuery _wallQuery;
         private EntityQuery _paddleQuery;
-
-        [BurstCompile]
+        
         public void OnCreate(ref SystemState state)
         {
             var builder = new EntityQueryBuilder(Allocator.Temp)

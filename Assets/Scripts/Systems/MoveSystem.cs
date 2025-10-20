@@ -13,7 +13,7 @@ namespace Systems
         public void OnCreate(ref SystemState state)
         {
             var builder = new EntityQueryBuilder(Allocator.Temp)
-                .WithAll<Move>();
+                .WithAll<Move, LocalTransform>();
         
             state.RequireForUpdate(state.GetEntityQuery(builder));
         }

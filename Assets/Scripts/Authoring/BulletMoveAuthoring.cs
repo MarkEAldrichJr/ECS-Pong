@@ -1,5 +1,6 @@
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Rendering;
 using UnityEngine;
 
 namespace Authoring
@@ -14,7 +15,8 @@ namespace Authoring
             public override void Bake(BulletMoveAuthoring authoring)
             {
                 var entity = GetEntity(authoring, TransformUsageFlags.Dynamic);
-            
+
+                AddComponent<URPMaterialPropertyBaseColor>(entity);
                 AddComponent<InitializeFlag>(entity);
                 AddComponent<BounceFlag>(entity);
                 AddComponent(entity, new Move
