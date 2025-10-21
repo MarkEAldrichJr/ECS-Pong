@@ -9,12 +9,16 @@ namespace Systems
 {
     public partial struct PointAddSystem : ISystem
     {
+        private float _frameRateCap;
+        
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BulletSpawn>();
             state.RequireForUpdate<Score>();
             state.RequireForUpdate<BounceFlag>();
+
+            _frameRateCap = 1f / 30f;
         }
 
         [BurstCompile]
@@ -44,12 +48,18 @@ namespace Systems
                 {
                     trans.ValueRW.Position = float3.zero;
                     move.ValueRW.MoveSpeed = 5f; //Magic number.  Speed is set on Move IComponentData
+                    
+                    
+                    
                     numSpawn++;
                     soundSingleton.ValueRW.Goal = true;
                 }
             }
 
-            state.EntityManager.Instantiate(spawnSingleton.Value, numSpawn, Allocator.Temp);
+            if (SystemAPI.Time.DeltaTime < _frameRateCap) //cap new spawns if framerate drops too low
+            {
+                state.EntityManager.Instantiate(spawnSingleton.Value, numSpawn, Allocator.Temp);
+            }
         }
     }
 }
