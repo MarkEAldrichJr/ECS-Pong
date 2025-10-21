@@ -1,3 +1,4 @@
+using System;
 using Authoring;
 using TMPro;
 using Unity.Collections;
@@ -14,34 +15,42 @@ namespace Mono
         private int _scoreLastFrame;
     
         private EntityManager _entityManager;
-        private Entity _scoreEntity;
+        private EntityQuery _scoreEntityQuery;
+        
 
         private void Awake()
         {
             _scoreText = GetComponent<TextMeshProUGUI>();
-            _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         }
 
         private void Start()
         {
-            var scoreEntityQuery = _entityManager.CreateEntityQuery(
+            _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            _scoreEntityQuery = _entityManager.CreateEntityQuery(
                 new EntityQueryBuilder(Allocator.Temp).WithAll<Score>());
-            _scoreEntity = scoreEntityQuery.GetSingletonEntity();
         }
 
         private void Update()
         {
-            var scoreThisFrame = _entityManager.GetComponentData<Score>(_scoreEntity).Value;
-
-            if (scoreThisFrame != _scoreLastFrame)
+            try
             {
-                _scoreText.text = scoreThisFrame.ToString();
-            
-                if (scoreThisFrame is > 1000 or < -1000)
-                    GameOver(scoreThisFrame);
-            }
+                var scoreEntity = _scoreEntityQuery.GetSingletonEntity();
+                var scoreThisFrame = _entityManager.GetComponentData<Score>(scoreEntity).Value;
 
-            _scoreLastFrame = scoreThisFrame;
+                if (scoreThisFrame != _scoreLastFrame)
+                {
+                    _scoreText.text = scoreThisFrame.ToString();
+
+                    if (scoreThisFrame is >= 1000 or <= -1000)
+                        GameOver(scoreThisFrame);
+                }
+
+                _scoreLastFrame = scoreThisFrame;
+            }
+            catch (Exception e)
+            {
+                //suppress errors
+            }
         }
 
         private void GameOver(int score)
