@@ -16,12 +16,12 @@ public class ScoreUpdater : MonoBehaviour
     {
         _text = GetComponent<TextMeshProUGUI>();
         _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        
     }
 
     private void Start()
     {
-        var scoreEntityQuery = _entityManager.CreateEntityQuery(new EntityQueryBuilder(Allocator.Temp).WithAll<Score>());
+        var scoreEntityQuery = _entityManager.CreateEntityQuery(
+            new EntityQueryBuilder(Allocator.Temp).WithAll<Score>());
         _scoreEntity = scoreEntityQuery.GetSingletonEntity();
     }
 
@@ -30,9 +30,7 @@ public class ScoreUpdater : MonoBehaviour
         var scoreThisFrame = _entityManager.GetComponentData<Score>(_scoreEntity).Value;
 
         if (scoreThisFrame != _scoreLastFrame)
-        {
             _text.text = scoreThisFrame.ToString();
-        }
         
         _scoreLastFrame = scoreThisFrame;
     }

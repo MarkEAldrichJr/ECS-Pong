@@ -1145,6 +1145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1356832087}
   - component: {fileID: 1356832086}
+  - component: {fileID: 1356832088}
   m_Layer: 0
   m_Name: SoundController
   m_TagString: Untagged
@@ -1264,6 +1265,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1356832088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356832085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5e8be2fbd941c68039fab51081bd9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoundController
+  audioClip: {fileID: 8300000, guid: cb8c7e1d42f8dd44580176c6ee61c1aa, type: 3}
+  goalPitch: {x: 0.5, y: 0.6}
+  wallPitch: {x: 0.8, y: 0.9}
+  paddlePitch: {x: 1.1, y: 1.2}
 --- !u!1 &1437832072
 GameObject:
   m_ObjectHideFlags: 0
@@ -1499,7 +1516,7 @@ SceneRoots:
   - {fileID: 283047610}
   - {fileID: 330585546}
   - {fileID: 410087041}
+  - {fileID: 1356832087}
   - {fileID: 832575519}
   - {fileID: 1849073989}
   - {fileID: 715762915}
-  - {fileID: 1356832087}

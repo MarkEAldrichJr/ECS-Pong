@@ -6,6 +6,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace Systems
 {
@@ -14,6 +15,11 @@ namespace Systems
     {
         private EntityQuery _wallQuery;
         private EntityQuery _paddleQuery;
+
+        public enum CollisionType
+        {
+            Paddle, Wall
+        }
         
         public void OnCreate(ref SystemState state)
         {
@@ -29,11 +35,16 @@ namespace Systems
             _paddleQuery = state.GetEntityQuery(
                 ComponentType.ReadOnly<PaddleTag>(),
                 ComponentType.ReadOnly<LocalTransform>());
+
+            state.RequireForUpdate<BounceSound>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            //Get Bounce Sound Singleton
+            var soundSingleton = SystemAPI.GetSingletonRW<BounceSound>();
+            
             // Get all walls with positions
             var wallEntities = _wallQuery.ToEntityArray(Allocator.TempJob);
             var wallTransforms = _wallQuery.ToComponentDataArray<LocalTransform>(Allocator.TempJob);
@@ -66,16 +77,28 @@ namespace Systems
                 };
             }
 
+            var collisionEvents = new NativeQueue<CollisionType>(Allocator.TempJob);
+            var collisionWriter = collisionEvents.AsParallelWriter();
+            
             // Schedule parallel job
             var job = new BounceJob
             {
                 WallData = wallData,
-                PaddleData = paddleData
+                PaddleData = paddleData,
+                CollisionEvents = collisionWriter
             };
-
+            
             state.Dependency = job.ScheduleParallel(state.Dependency);
             state.Dependency.Complete(); // Ensure completion before cleanup
-
+            
+            while (collisionEvents.TryDequeue(out var collisionType))
+            {
+                if (collisionType == CollisionType.Paddle)
+                    soundSingleton.ValueRW.Paddle = true;
+                else if (collisionType == CollisionType.Wall)
+                    soundSingleton.ValueRW.Wall = true;
+            }
+            
             // Cleanup
             wallEntities.Dispose();
             wallTransforms.Dispose();
@@ -83,6 +106,7 @@ namespace Systems
             paddleTransforms.Dispose();
             wallData.Dispose();
             paddleData.Dispose();
+            collisionEvents.Dispose();
         }
 
         private struct CollisionData
@@ -97,11 +121,11 @@ namespace Systems
         {
             [ReadOnly] public NativeArray<CollisionData> WallData;
             [ReadOnly] public NativeArray<CollisionData> PaddleData;
+            [WriteOnly] public NativeQueue<CollisionType>.ParallelWriter CollisionEvents;
 
             private void Execute(
                 ref Move move,
-                in LocalTransform trans,
-                in BounceFlag bounceFlag)
+                in LocalTransform trans, in BounceFlag bounceFlag)
             {
                 var bulletPos = trans.Position;
                 const float bulletRadius = 0.5f; // Half the bullet size
@@ -126,7 +150,8 @@ namespace Systems
                             move.MoveDirection.y = -move.MoveDirection.y;
                             hasCollided = true;
                         }
-                        
+
+                        CollisionEvents.Enqueue(CollisionType.Wall);
                         if (hasCollided) return;
                     }
                 }
@@ -163,6 +188,7 @@ namespace Systems
 
                             // Normalize direction
                             move.MoveDirection = math.normalize(move.MoveDirection);
+                            CollisionEvents.Enqueue(CollisionType.Paddle);
                             return;
                         }
                     }

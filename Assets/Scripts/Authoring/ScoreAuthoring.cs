@@ -24,6 +24,7 @@ namespace Authoring
                 {
                     Value = entityPrefab
                 });
+                AddComponent<BounceSound>(e);
             }
         }
     }
@@ -37,5 +38,12 @@ namespace Authoring
     {
         public int Value;
         public int MaxScore;
+    }
+
+    public struct BounceSound : IComponentData
+    {
+        public bool Wall;
+        public bool Paddle;
+        public bool Goal;
     }
 }

@@ -18,8 +18,10 @@ namespace Systems
 
             if (math.abs(score.Value) > score.MaxScore)
             {
-                Debug.Log("Game Over!");
-                //end game sequence
+                foreach (var move in SystemAPI.Query<RefRO<BounceFlag>>())
+                {
+                    
+                }
             }
         }
     }

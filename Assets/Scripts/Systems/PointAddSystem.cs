@@ -20,6 +20,7 @@ namespace Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            var soundSingleton = SystemAPI.GetSingletonRW<BounceSound>();
             var scoreSingleton = SystemAPI.GetSingletonRW<Score>();
             var spawnSingleton = SystemAPI.GetSingleton<BulletSpawn>();
             var numSpawn = 0;
@@ -44,6 +45,7 @@ namespace Systems
                     trans.ValueRW.Position = float3.zero;
                     move.ValueRW.MoveSpeed = 5f; //Magic number.  Speed is set on Move IComponentData
                     numSpawn++;
+                    soundSingleton.ValueRW.Goal = true;
                 }
             }
 
