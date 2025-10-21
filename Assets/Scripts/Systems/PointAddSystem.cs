@@ -48,9 +48,7 @@ namespace Systems
                 {
                     trans.ValueRW.Position = float3.zero;
                     move.ValueRW.MoveSpeed = 5f; //Magic number.  Speed is set on Move IComponentData
-                    
-                    
-                    
+                    //keeps old direction
                     numSpawn++;
                     soundSingleton.ValueRW.Goal = true;
                 }

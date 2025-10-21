@@ -24,8 +24,6 @@ namespace Authoring
             }
         }
     }
-
-
-
+    
     public struct PaddleTag : IComponentData { }
 }

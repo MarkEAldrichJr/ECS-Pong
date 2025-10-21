@@ -15,7 +15,7 @@ namespace Systems
         private EntityQuery _wallQuery;
         private EntityQuery _paddleQuery;
 
-        public enum CollisionType
+        private enum CollisionType
         {
             Paddle, Wall
         }
@@ -60,9 +60,7 @@ namespace Systems
             {
                 wallData[i] = new CollisionData
                 {
-                    Position = wallTransforms[i].Position,
-                    Scale = wallTransforms[i].Scale,
-                    Entity = wallEntities[i]
+                    Position = wallTransforms[i].Position
                 };
             }
             
@@ -70,9 +68,7 @@ namespace Systems
             {
                 paddleData[i] = new CollisionData
                 {
-                    Position = paddleTransforms[i].Position,
-                    Scale = paddleTransforms[i].Scale,
-                    Entity = paddleEntities[i]
+                    Position = paddleTransforms[i].Position
                 };
             }
 
@@ -111,8 +107,6 @@ namespace Systems
         private struct CollisionData
         {
             public float3 Position;
-            public float Scale;
-            public Entity Entity;
         }
 
         [BurstCompile]
@@ -131,9 +125,8 @@ namespace Systems
                 var hasCollided = false;
 
                 // Check wall collisions
-                for (var i = 0; i < WallData.Length; i++)
+                foreach (var wall in WallData)
                 {
-                    var wall = WallData[i];
                     var wallHalfExtents = new float3(17f, 0.25f, 0.5f); // 34 * 0.5, 0.5 * 0.5
                     
                     if (IsBoxColliding(bulletPos, bulletRadius, wall.Position, wallHalfExtents))
@@ -156,9 +149,8 @@ namespace Systems
                 }
 
                 // Check paddle collisions
-                for (var i = 0; i < PaddleData.Length; i++)
+                foreach (var paddle in PaddleData)
                 {
-                    var paddle = PaddleData[i];
                     var paddleHalfExtents = new float3(0.5f, 2f, 0.5f); // 1 * 0.5, 4 * 0.5
                     
                     if (IsBoxColliding(bulletPos, bulletRadius, paddle.Position, paddleHalfExtents))

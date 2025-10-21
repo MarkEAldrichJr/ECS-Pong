@@ -6,6 +6,7 @@ using Unity.Mathematics;
 
 namespace Systems
 {
+    [UpdateInGroup(typeof(SimulationSystemGroup))]
     public partial struct GameOverSystem : ISystem
     {
         private EntityQuery _bounceQuery;
@@ -24,7 +25,6 @@ namespace Systems
         public void OnUpdate(ref SystemState state)
         {
             var score = SystemAPI.GetSingleton<Score>();
-
             if (math.abs(score.Value) < score.MaxScore) return;
             
             state.EntityManager.DestroyEntity(_bounceQuery);
