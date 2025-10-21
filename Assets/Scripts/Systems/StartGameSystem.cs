@@ -11,15 +11,11 @@ namespace Systems
     public partial class StartGameSystem : SystemBase
     {
         private InputSystem_Actions _inputControls;
-        private EntityQuery _entityQuery;
         
         protected override void OnCreate()
         {
             _inputControls = new InputSystem_Actions();
             _inputControls.Player.StartGame.performed += OnStartGame;
-            _entityQuery =
-                GetEntityQuery(new EntityQueryBuilder(Allocator.Temp)
-                    .WithAll<GameStartedFlag>());
         }
 
         protected override void OnStartRunning() => _inputControls.Enable();
@@ -44,6 +40,6 @@ namespace Systems
 
     public struct GameStartedFlag : IComponentData
     {
-        public bool Value;
+        public bool Value; //purely here because TryGetSingleton doesn't work for flags
     }
 }

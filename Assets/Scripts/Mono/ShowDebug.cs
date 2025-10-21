@@ -1,0 +1,31 @@
+using System.Collections;
+using UnityEngine;
+
+namespace Mono
+{
+    public class ShowDebug : MonoBehaviour
+    {
+        private const uint Qsize = 15; // number of messages to keep
+        private readonly Queue _myLogQueue = new();
+
+        private void Start() => Debug.Log("Started up logging.");
+        private void OnEnable() => Application.logMessageReceived += HandleLog;
+        private void OnDisable() => Application.logMessageReceived -= HandleLog;
+
+        private void HandleLog(string logString, string stackTrace, LogType type)
+        {
+            _myLogQueue.Enqueue("[" + type + "] : " + logString);
+            if (type == LogType.Exception)
+                _myLogQueue.Enqueue(stackTrace);
+            while (_myLogQueue.Count > Qsize)
+                _myLogQueue.Dequeue();
+        }
+
+        private void OnGUI()
+        {
+            GUILayout.BeginArea(new Rect(Screen.width - 400, 0, 400, Screen.height));
+            GUILayout.Label("\n" + string.Join("\n", _myLogQueue.ToArray()));
+            GUILayout.EndArea();
+        }
+    }
+}
