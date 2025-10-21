@@ -6,7 +6,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace Systems
 {
@@ -188,6 +187,19 @@ namespace Systems
 
                             // Normalize direction
                             move.MoveDirection = math.normalize(move.MoveDirection);
+
+                            //ensure bullets keep moving at a minimum lateral speed
+                            if (move.MoveDirection.x < 0)
+                            {
+                                move.MoveDirection.x = math.clamp(move.MoveDirection.x,
+                                    -math.INFINITY, -0.5f);
+                            }
+                            else
+                            {
+                                move.MoveDirection.x = math.clamp(move.MoveDirection.x, 0.5f,
+                                    -math.INFINITY);
+                            }
+                            
                             CollisionEvents.Enqueue(CollisionType.Paddle);
                             return;
                         }
