@@ -7,6 +7,8 @@ namespace Systems
 {
     public partial struct GameOverSystem : ISystem
     {
+        
+        
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<Score>();
@@ -18,10 +20,9 @@ namespace Systems
 
             if (math.abs(score.Value) > score.MaxScore)
             {
-                foreach (var move in SystemAPI.Query<RefRO<BounceFlag>>())
-                {
-                    
-                }
+                var entityQuery = state.EntityManager.CreateEntityQuery(
+                    ComponentType.ReadOnly<BounceFlag>());
+                state.EntityManager.DestroyEntity(entityQuery);
             }
         }
     }

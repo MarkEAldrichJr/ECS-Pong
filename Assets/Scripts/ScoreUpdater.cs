@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class ScoreUpdater : MonoBehaviour
 {
-    private TextMeshProUGUI _text;
+    [SerializeField] private TextMeshProUGUI winnerText;
+    private TextMeshProUGUI _scoreText;
+    
     private int _scoreLastFrame;
     
     private EntityManager _entityManager;
@@ -14,7 +16,7 @@ public class ScoreUpdater : MonoBehaviour
 
     private void Awake()
     {
-        _text = GetComponent<TextMeshProUGUI>();
+        _scoreText = GetComponent<TextMeshProUGUI>();
         _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
     }
 
@@ -30,8 +32,23 @@ public class ScoreUpdater : MonoBehaviour
         var scoreThisFrame = _entityManager.GetComponentData<Score>(_scoreEntity).Value;
 
         if (scoreThisFrame != _scoreLastFrame)
-            _text.text = scoreThisFrame.ToString();
-        
+        {
+            _scoreText.text = scoreThisFrame.ToString();
+            
+            if (scoreThisFrame is > 1000 or < -1000)
+            {
+                GameOver(scoreThisFrame);
+            }
+        }
+
         _scoreLastFrame = scoreThisFrame;
+    }
+
+    private void GameOver(int score)
+    {
+        winnerText.alignment = score > 0 ? 
+            TextAlignmentOptions.BaselineLeft : TextAlignmentOptions.BaselineRight;
+
+        winnerText.gameObject.SetActive(true);
     }
 }
