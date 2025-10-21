@@ -208,7 +208,7 @@ namespace Systems
             }
 
             // AABB vs Sphere collision detection
-            private bool IsBoxColliding(float3 spherePos, float sphereRadius, float3 boxCenter, float3 boxHalfExtents)
+            private static bool IsBoxColliding(float3 spherePos, float sphereRadius, float3 boxCenter, float3 boxHalfExtents)
             {
                 // Find the closest point on the box to the sphere
                 var closestPoint = math.clamp(spherePos, boxCenter - boxHalfExtents, boxCenter + boxHalfExtents);
