@@ -13,7 +13,6 @@ namespace Systems
         private Random _rng;
         private EntityQuery _bulletQuery;
         
-        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             _rng = new Random((uint)System.DateTime.Now.Millisecond);
