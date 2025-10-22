@@ -121,7 +121,7 @@ namespace Systems
                 in LocalTransform trans, in BounceFlag bounceFlag)
             {
                 var bulletPos = trans.Position;
-                const float bulletRadius = 0.5f; // Half the bullet size
+                const float bulletRadius = 0.5f * 0.5f; // Half the bullet size
                 var hasCollided = false;
 
                 // Check wall collisions
@@ -200,15 +200,19 @@ namespace Systems
             }
 
             // AABB vs Sphere collision detection
-            private static bool IsBoxColliding(float3 spherePos, float sphereRadius, float3 boxCenter, float3 boxHalfExtents)
+            private static bool IsBoxColliding(
+                float3 spherePos, 
+                float sphereRadiusSquared,
+                float3 boxCenter,
+                float3 boxHalfExtents)
             {
                 // Find the closest point on the box to the sphere
                 var closestPoint = math.clamp(spherePos, boxCenter - boxHalfExtents, boxCenter + boxHalfExtents);
                 
                 // Calculate distance between sphere center and closest point
-                var distance = math.distance(spherePos, closestPoint);
+                var distance = math.distancesq(spherePos, closestPoint);
                 
-                return distance < sphereRadius;
+                return distance < sphereRadiusSquared;
             }
         }
     }

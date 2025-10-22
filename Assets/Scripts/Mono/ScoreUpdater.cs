@@ -16,7 +16,6 @@ namespace Mono
     
         private EntityManager _entityManager;
         private EntityQuery _scoreEntityQuery;
-        
 
         private void Awake()
         {
