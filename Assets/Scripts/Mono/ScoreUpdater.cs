@@ -10,6 +10,8 @@ namespace Mono
     public class ScoreUpdater : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI winnerText;
+        [SerializeField] private TextMeshProUGUI restartText;
+        
         private TextMeshProUGUI _scoreText;
     
         private int _scoreLastFrame;
@@ -27,6 +29,8 @@ namespace Mono
             _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             _scoreEntityQuery = _entityManager.CreateEntityQuery(
                 new EntityQueryBuilder(Allocator.Temp).WithAll<Score>());
+            restartText.gameObject.SetActive(false);
+            winnerText.gameObject.SetActive(false);
         }
 
         private void Update()
@@ -46,7 +50,7 @@ namespace Mono
 
                 _scoreLastFrame = scoreThisFrame;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //suppress errors
             }
@@ -58,6 +62,7 @@ namespace Mono
                 TextAlignmentOptions.BaselineLeft : TextAlignmentOptions.BaselineRight;
 
             winnerText.gameObject.SetActive(true);
+            restartText.gameObject.SetActive(true);
         }
     }
 }

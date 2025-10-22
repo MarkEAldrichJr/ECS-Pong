@@ -48,7 +48,7 @@ namespace Mono
                     Paddle = false
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //suppress errors
             }
