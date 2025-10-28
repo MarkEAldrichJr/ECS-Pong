@@ -23,7 +23,7 @@ namespace Systems
         public void OnCreate(ref SystemState state)
         {
             var builder = new EntityQueryBuilder(Allocator.Temp)
-                .WithAll<BounceFlag, Move>();
+                .WithAll<BounceFlag, Move>().WithNone<InitializeFlag>();
             
             state.RequireForUpdate(state.GetEntityQuery(builder));
 
@@ -80,7 +80,10 @@ namespace Systems
             {
                 WallData = wallData,
                 PaddleData = paddleData,
-                CollisionEvents = collisionWriter
+                CollisionEvents = collisionWriter,
+                BulletRadius = 0.5f * 0.5f,
+                WallHalfExtents = new float3(17f, 0.25f, 0.5f),
+                PaddleHalfExtents = new float3(0.5f, 2f, 0.5f)
             };
             
             state.Dependency = job.ScheduleParallel(state.Dependency);
@@ -114,6 +117,9 @@ namespace Systems
         {
             [ReadOnly] public NativeArray<CollisionData> WallData;
             [ReadOnly] public NativeArray<CollisionData> PaddleData;
+            [ReadOnly] public float BulletRadius;
+            [ReadOnly] public float3 WallHalfExtents;
+            [ReadOnly] public float3 PaddleHalfExtents;
             [WriteOnly] public NativeQueue<CollisionType>.ParallelWriter CollisionEvents;
 
             private void Execute(
@@ -121,15 +127,13 @@ namespace Systems
                 in LocalTransform trans, in BounceFlag bounceFlag)
             {
                 var bulletPos = trans.Position;
-                const float bulletRadius = 0.5f * 0.5f; // Half the bullet size
                 var hasCollided = false;
 
                 // Check wall collisions
                 foreach (var wall in WallData)
                 {
-                    var wallHalfExtents = new float3(17f, 0.25f, 0.5f); // 34 * 0.5, 0.5 * 0.5
                     
-                    if (IsBoxColliding(bulletPos, bulletRadius, wall.Position, wallHalfExtents))
+                    if (IsBoxColliding(bulletPos, BulletRadius, wall.Position, WallHalfExtents))
                     {
                         // Only bounce if we're moving towards the wall
                         if (bulletPos.y > wall.Position.y && move.MoveDirection.y < 0)
@@ -151,9 +155,8 @@ namespace Systems
                 // Check paddle collisions
                 foreach (var paddle in PaddleData)
                 {
-                    var paddleHalfExtents = new float3(0.5f, 2f, 0.5f); // 1 * 0.5, 4 * 0.5
-                    
-                    if (IsBoxColliding(bulletPos, bulletRadius, paddle.Position, paddleHalfExtents))
+                    if (IsBoxColliding(bulletPos, BulletRadius, paddle.Position, 
+                            PaddleHalfExtents))
                     {
                         // Only bounce if we're moving towards the paddle
                         var shouldBounce = false;
