@@ -4,6 +4,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Rendering;
+using Unity.Transforms;
 
 namespace Systems
 {
@@ -27,14 +28,15 @@ namespace Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (move, color) in SystemAPI
-                         .Query<RefRW<Move>, RefRW<URPMaterialPropertyBaseColor>>()
+            foreach (var (move, color, trans) in SystemAPI
+                         .Query<RefRW<Move>, RefRW<URPMaterialPropertyBaseColor>, RefRW<LocalTransform>>()
                          .WithAll<InitializeFlag, BounceFlag>())
             {
                 var moveX = _rng.NextBool() ? 5 : -5;
                 var moveY = _rng.NextFloat(-5f, 5f);
                 var movement = new float2(moveX, moveY);
                 move.ValueRW.MoveDirection = math.normalize(movement);
+                trans.ValueRW.Position.z = _rng.NextFloat(-0.2f, 0.2f);
 
                 var brightness = _rng.NextFloat(0f, 1.0f);
                 color.ValueRW.Value = new float4(brightness, brightness, brightness, 1.0f);
