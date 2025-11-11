@@ -2,7 +2,6 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Transforms;
 
 namespace Systems
@@ -46,7 +45,8 @@ namespace Systems
 
                 if (sideDist is > 17 or < -17)
                 {
-                    trans.ValueRW.Position = float3.zero;
+                    trans.ValueRW.Position.x = 0f;
+                    trans.ValueRW.Position.y = 0f;
                     move.ValueRW.MoveSpeed = 5f; //Magic number.  Speed is set on Move IComponentData
                     //keeps old direction
                     numSpawn++;
