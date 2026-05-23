@@ -44,11 +44,12 @@ namespace Systems
         }
     }
 
+    [BurstCompile]
     public partial struct MoveJob : IJobEntity
     {
         [ReadOnly] public float DeltaTime;
-        
-        public void Execute(ref LocalTransform trans, in Move move)
+
+        private void Execute(ref LocalTransform trans, in Move move)
         {
             var moveDelta2D = move.MoveDirection * (move.MoveSpeed * DeltaTime);
             var moveDelta3D = new float3(moveDelta2D.x, moveDelta2D.y, 0);

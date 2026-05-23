@@ -17,7 +17,7 @@ namespace Systems
             state.RequireForUpdate<Score>();
             state.RequireForUpdate<BounceFlag>();
 
-            _frameRateCap = 1f / 30f;
+            _frameRateCap = 1f / 15f;
         }
 
         [BurstCompile]
@@ -28,7 +28,8 @@ namespace Systems
             var spawnSingleton = SystemAPI.GetSingleton<BulletSpawn>();
             var numSpawn = 0;
             
-            foreach (var (trans, move) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<Move>>()
+            foreach (var (trans, move) in SystemAPI
+                         .Query<RefRW<LocalTransform>, RefRW<Move>>()
                          .WithAll<BounceFlag>())
             {
                 var sideDist = trans.ValueRO.Position.x;
