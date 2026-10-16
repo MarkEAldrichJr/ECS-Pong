@@ -186,6 +186,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &306454302
 MeshFilter:
@@ -331,6 +332,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &347543567
 MeshFilter:
@@ -435,6 +437,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1508731768
 MeshFilter:
@@ -580,6 +583,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &1599892148
 MeshFilter:
@@ -661,7 +665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c86c842b12e140528a3d5936b92488b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Authoring.ScoreAuthoring
-  maxScore: 100000
+  maxScore: 1000
   bulletPrefab: {fileID: 2995950388642920768, guid: b65bc1243fcf252468a02a1448716276, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
